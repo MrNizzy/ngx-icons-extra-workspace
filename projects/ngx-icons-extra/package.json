@@ -1,10 +1,39 @@
 {
   "name": "ngx-icons-extra",
   "version": "0.0.1",
+  "scripts": {
+    "build": "ng build ngx-icons-extra",
+    "version:major": "npm version major --no-git-tag-version",
+    "version:minor": "npm version minor --no-git-tag-version",
+    "version:patch": "npm version patch --no-git-tag-version",
+    "publish:github": "npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrNizzy/ngx-icons-extra-workspace.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MrNizzy/ngx-icons-extra-workspace/issues"
+  },
+  "homepage": "https://github.com/MrNizzy/ngx-icons-extra-workspace#readme",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "peerDependencies": {
     "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0"
   },
+  "keywords": [
+    "ngx-icons",
+    "ngx-icons-extra",
+    "ngx-icons-workspace",
+    "angular",
+    "iconify",
+    "angular iconify",
+    "ngx-iconify"
+  ],
+  "author": "MrNizzy",
+  "license": "MIT",
   "dependencies": {
     "tslib": "^2.3.0"
   },

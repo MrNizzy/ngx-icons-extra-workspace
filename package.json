@@ -4,6 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "lib:build": "ng build ngx-icons-extra",
+    "lib:watch": "ng build ngx-icons-extra --watch --configuration development",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
