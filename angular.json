@@ -48,6 +48,7 @@
               }
             ],
             "styles": [
+              "projects/demo/src/material-theme.scss",
               "projects/demo/src/styles.css"
             ]
           },
