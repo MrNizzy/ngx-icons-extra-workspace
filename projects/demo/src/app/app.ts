@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxIcon } from 'ngx-icons-extra';
+import { Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
@@ -64,6 +65,7 @@ interface CategoryOption {
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [
     CommonModule,
     NgxIcon,
@@ -84,6 +86,7 @@ interface CategoryOption {
 })
 export class App implements OnInit {
   private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
 
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
@@ -124,7 +127,7 @@ export class App implements OnInit {
     }
 
     const counts = new Map<string, number>();
-    Object.values(data).forEach((details) => {
+    (Object.values(data) as CollectionDetails[]).forEach((details) => {
       const key = details.category || 'Otros';
       counts.set(key, (counts.get(key) ?? 0) + 1);
     });
@@ -252,6 +255,11 @@ export class App implements OnInit {
       maxWidth: '640px',
       width: '90vw',
     });
+  }
+
+  protected viewCollection(item: CollectionVM, event?: Event): void {
+    event?.stopPropagation();
+    this.router.navigate(['collections', item.id]);
   }
 
   protected refresh(): void {

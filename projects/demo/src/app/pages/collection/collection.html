@@ -1,0 +1,184 @@
+<section class="collection-page">
+  <header class="collection-hero">
+    <div class="collection-hero__cta">
+      <button mat-stroked-button type="button" (click)="goBack()">
+        <mat-icon>
+          <ngx-icon collection="material-symbols" icon="arrow-back" />
+        </mat-icon>
+        Regresar
+      </button>
+    </div>
+    @if (info()) {
+    <div class="collection-hero__content">
+      <p class="collection-hero__eyebrow">Colección</p>
+      <h1>
+        {{ info()?.title }}
+        <span>/ {{ info()?.prefix }}</span>
+      </h1>
+      <p class="collection-hero__subtitle">
+        Explora todos los íconos disponibles, agrúpalos por categoría y copia el nombre que
+        necesites sin salir de la página.
+      </p>
+      <div class="collection-hero__stats">
+        <article class="stat-card">
+          <p>Íconos</p>
+          <strong>{{ info()?.total }}</strong>
+        </article>
+        <article class="stat-card">
+          <p>Prefijo</p>
+          <strong>{{ info()?.prefix }}</strong>
+        </article>
+        @if (info()?.license?.title) {
+        <article class="stat-card">
+          <p>Licencia</p>
+          <a
+            class="stat-card__link"
+            [href]="info()?.license?.url || '#'"
+            rel="noreferrer"
+            target="_blank"
+          >
+            {{ info()?.license?.title }}
+          </a>
+        </article>
+        } @if (info()?.author?.name) {
+        <article class="stat-card">
+          <p>Autor</p>
+          <a
+            class="stat-card__link"
+            [href]="info()?.author?.url || '#'"
+            rel="noreferrer"
+            target="_blank"
+          >
+            {{ info()?.author?.name }}
+          </a>
+        </article>
+        }
+      </div>
+    </div>
+    }
+  </header>
+
+  @if (!loading() && !error()) {
+  <section class="collection-filters" aria-label="Filtros de íconos">
+    <mat-form-field appearance="outline" class="collection-filters__search">
+      <mat-label>Buscar íconos</mat-label>
+      <input
+        matInput
+        type="search"
+        placeholder="Buscar por nombre..."
+        [value]="search()"
+        #searchInput
+        (input)="setSearch(searchInput.value)"
+      />
+      @if (search()) {
+      <button
+        matSuffix
+        mat-icon-button
+        type="button"
+        aria-label="Limpiar búsqueda"
+        (click)="setSearch('')"
+      >
+        <mat-icon>
+          <ngx-icon collection="ix" icon="cancel" />
+        </mat-icon>
+      </button>
+      }
+    </mat-form-field>
+
+    <div class="collection-filters__chips">
+      <p>Categorías</p>
+      <mat-chip-set role="listbox" class="chip-set">
+        <mat-chip-option
+          [selected]="selectedCategory() === 'all'"
+          (click)="selectCategory('all')"
+          [disableRipple]="true"
+          [selectable]="false"
+        >
+          Todas
+        </mat-chip-option>
+        @for (category of categoryOptions(); track category.value) {
+        <mat-chip-option
+          [selected]="selectedCategory() === category.value"
+          (click)="selectCategory(category.value)"
+          [disableRipple]="true"
+          [selectable]="false"
+        >
+          {{ category.label || category.value }}
+          <span class="chip__badge">{{ category.count }}</span>
+        </mat-chip-option>
+        }
+      </mat-chip-set>
+    </div>
+  </section>
+  } @if (loading()) {
+  <div class="collection-page__state" aria-live="polite">
+    <mat-progress-spinner diameter="64" mode="indeterminate" />
+    <p>Cargando íconos...</p>
+  </div>
+  } @else if (error()) {
+  <div class="collection-page__state collection-page__state--error" aria-live="assertive">
+    <p>{{ error() }}</p>
+    <button mat-flat-button color="accent" type="button" (click)="reload()">Reintentar</button>
+  </div>
+  } @else {
+  <section class="collection-sections" aria-live="polite">
+    @if (!sections().length) {
+    <div class="collection-page__state collection-page__state--empty">
+      <p>No encontramos íconos con esos filtros.</p>
+    </div>
+    } @else { @for (section of sections(); track section.category) {
+    <article class="icon-section">
+      <header class="icon-section__header">
+        <div class="icon-section__content">
+          <p class="icon-section__eyebrow">Categoría</p>
+          <h2>{{ section.label }}</h2>
+        </div>
+        <span>{{ section.total }} íconos</span>
+      </header>
+
+      <section class="icon-chunk icon-chunk--stacked">
+        @for (chunk of section.chunks; track chunkTrack(chunk)) { @defer (on viewport) {
+        <div class="icons-grid">
+          @for (icon of chunk; track icon) {
+          <article class="icon-card">
+            <button
+              matIconButton
+              type="button"
+              class="icon-card__copy"
+              (click)="copy(icon)"
+              aria-label="Copiar HTML"
+              matTooltip="Copiar snippet"
+            >
+              <mat-icon>
+                <ngx-icon collection="material-symbols" icon="content-copy" />
+              </mat-icon>
+            </button>
+            <div class="icon-card__preview">
+              <ngx-icon
+                [collection]="currentId()"
+                [icon]="icon"
+                width="36"
+                height="36"
+                class="icon-card__icon"
+              />
+            </div>
+            <span class="icon-card__name">{{ icon }}</span>
+          </article>
+          }
+        </div>
+        } @placeholder {
+        <div class="icons-grid icons-grid--placeholder" aria-hidden="true">
+          @for (placeholder of placeholderIcons; track placeholder) {
+          <div class="icon-card skeleton-card">
+            <div class="skeleton skeleton-preview"></div>
+            <div class="skeleton skeleton-name"></div>
+          </div>
+          }
+        </div>
+        } }
+      </section>
+    </article>
+    } }
+  </section>
+  }
+</section>
