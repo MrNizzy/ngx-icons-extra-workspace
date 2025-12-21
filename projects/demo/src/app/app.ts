@@ -43,6 +43,8 @@ interface CollectionDetails {
 type CollectionsResponse = Record<string, CollectionDetails>;
 
 type PaletteFilter = 'all' | 'mono' | 'color';
+type CommercialUseFilter = 'all' | 'allowed' | 'not_allowed';
+type AttributionFilter = 'all' | 'required' | 'optional';
 
 interface CollectionVM {
   id: string;
@@ -53,6 +55,11 @@ interface CollectionVM {
 interface CollectionGroup {
   category: string;
   items: CollectionVM[];
+}
+
+interface CategoryOption {
+  value: string;
+  count: number;
 }
 
 @Component({
@@ -83,6 +90,9 @@ export class App implements OnInit {
   readonly collections = signal<CollectionsResponse | null>(null);
   readonly search = signal('');
   readonly paletteFilter = signal<PaletteFilter>('all');
+  readonly commercialUseFilter = signal<CommercialUseFilter>('all');
+  readonly attributionFilter = signal<AttributionFilter>('all');
+  readonly selectedCategories = signal<Set<string>>(new Set());
 
   private readonly dialog = inject(MatDialog);
 
@@ -95,6 +105,35 @@ export class App implements OnInit {
     { value: 'color', label: 'Multicolor' },
   ];
 
+  protected readonly commercialOptions: { value: CommercialUseFilter; label: string }[] = [
+    { value: 'all', label: 'Todo' },
+    { value: 'allowed', label: 'Permitido' },
+    { value: 'not_allowed', label: 'No permitido' },
+  ];
+
+  protected readonly attributionOptions: { value: AttributionFilter; label: string }[] = [
+    { value: 'all', label: 'Todas' },
+    { value: 'required', label: 'Requiere atribución' },
+    { value: 'optional', label: 'Atribución opcional' },
+  ];
+
+  readonly categoryOptions = computed<CategoryOption[]>(() => {
+    const data = this.collections();
+    if (!data) {
+      return [];
+    }
+
+    const counts = new Map<string, number>();
+    Object.values(data).forEach((details) => {
+      const key = details.category || 'Otros';
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    });
+
+    return Array.from(counts.entries())
+      .map(([value, count]) => ({ value, count }))
+      .sort((a, b) => a.value.localeCompare(b.value));
+  });
+
   readonly groupedCollections = computed<CollectionGroup[]>(() => {
     const data = this.collections();
     if (!data) {
@@ -103,6 +142,10 @@ export class App implements OnInit {
 
     const query = this.search().trim().toLowerCase();
     const palette = this.paletteFilter();
+    const commercialFilter = this.commercialUseFilter();
+    const attributionFilter = this.attributionFilter();
+    const selectedCategories = this.selectedCategories();
+    const hasCategoryFilter = selectedCategories.size > 0;
     const groups = new Map<string, CollectionVM[]>();
 
     Object.entries(data).forEach(([id, details]) => {
@@ -120,6 +163,30 @@ export class App implements OnInit {
       }
 
       if (palette === 'color' && !details.palette) {
+        return;
+      }
+
+      const category = details.category || 'Otros';
+      const matchesCategory = !hasCategoryFilter || selectedCategories.has(category);
+      if (!matchesCategory) {
+        return;
+      }
+
+      const allowsCommercial = this.isCommercialAllowed(details);
+      const matchesCommercial =
+        commercialFilter === 'all' ||
+        (commercialFilter === 'allowed' && allowsCommercial) ||
+        (commercialFilter === 'not_allowed' && !allowsCommercial);
+      if (!matchesCommercial) {
+        return;
+      }
+
+      const requiresAttr = this.requiresAttribution(details);
+      const matchesAttribution =
+        attributionFilter === 'all' ||
+        (attributionFilter === 'required' && requiresAttr) ||
+        (attributionFilter === 'optional' && !requiresAttr);
+      if (!matchesAttribution) {
         return;
       }
 
@@ -153,6 +220,28 @@ export class App implements OnInit {
     this.paletteFilter.set(value);
   }
 
+  protected setCommercialUse(value: CommercialUseFilter): void {
+    this.commercialUseFilter.set(value);
+  }
+
+  protected setAttribution(value: AttributionFilter): void {
+    this.attributionFilter.set(value);
+  }
+
+  protected toggleCategory(value: string): void {
+    const current = new Set(this.selectedCategories());
+    if (current.has(value)) {
+      current.delete(value);
+    } else {
+      current.add(value);
+    }
+    this.selectedCategories.set(current);
+  }
+
+  protected clearCategories(): void {
+    this.selectedCategories.set(new Set());
+  }
+
   protected openCollection(item: CollectionVM): void {
     this.dialog.open(CollectionDialog, {
       data: {
@@ -182,5 +271,27 @@ export class App implements OnInit {
         this.loading.set(false);
       },
     });
+  }
+
+  private isCommercialAllowed(details: CollectionDetails): boolean {
+    const text = this.getLicenseText(details);
+    if (!text) {
+      return true;
+    }
+    return !text.includes('nc');
+  }
+
+  private requiresAttribution(details: CollectionDetails): boolean {
+    const text = this.getLicenseText(details);
+    if (!text) {
+      return false;
+    }
+    return text.includes('cc-by') || text.includes('by-sa') || text.includes('attribution');
+  }
+
+  private getLicenseText(details: CollectionDetails): string {
+    const title = details.license?.title ?? '';
+    const spdx = details.license?.spdx ?? '';
+    return `${title} ${spdx}`.toLowerCase();
   }
 }

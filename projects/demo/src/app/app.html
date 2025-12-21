@@ -36,29 +36,119 @@
       />
       @if (search()) {
       <button
-        mat-icon-button
+        matIconButton
         matSuffix
         type="button"
         aria-label="Limpiar búsqueda"
         (click)="setSearch('')"
       >
-        ✕
+        <mat-icon>
+          <ngx-icon collection="ix" icon="cancel" />
+        </mat-icon>
       </button>
       }
     </mat-form-field>
 
-    <mat-chip-set class="filters__chips" role="listbox" aria-label="Filtrar por paleta">
-      @for (option of paletteOptions; track option.value) {
-      <mat-chip-option
-        [selected]="paletteFilter() === option.value"
-        (click)="setPalette(option.value)"
-        [disableRipple]="true"
-        [selectable]="false"
+    <div class="filters__panel">
+      <article class="filter-card">
+        <header>
+          <p>Paleta</p>
+          <span>Colores disponibles</span>
+        </header>
+        <mat-chip-set class="filters__chips" role="listbox" aria-label="Filtrar por paleta">
+          @for (option of paletteOptions; track option.value) {
+          <mat-chip-option
+            [selected]="paletteFilter() === option.value"
+            (click)="setPalette(option.value)"
+            [disableRipple]="true"
+            [selectable]="false"
+          >
+            {{ option.label }}
+          </mat-chip-option>
+          }
+        </mat-chip-set>
+      </article>
+
+      <article class="filter-card">
+        <header>
+          <p>Uso comercial</p>
+          <span>Según licencia</span>
+        </header>
+        <mat-chip-set class="filters__chips" role="listbox" aria-label="Filtrar por uso comercial">
+          @for (option of commercialOptions; track option.value) {
+          <mat-chip-option
+            [selected]="commercialUseFilter() === option.value"
+            (click)="setCommercialUse(option.value)"
+            [disableRipple]="true"
+            [selectable]="false"
+          >
+            {{ option.label }}
+          </mat-chip-option>
+          }
+        </mat-chip-set>
+      </article>
+
+      <article class="filter-card">
+        <header>
+          <p>Atribución</p>
+          <span>Requiere crédito</span>
+        </header>
+        <mat-chip-set class="filters__chips" role="listbox" aria-label="Filtrar por atribución">
+          @for (option of attributionOptions; track option.value) {
+          <mat-chip-option
+            [selected]="attributionFilter() === option.value"
+            (click)="setAttribution(option.value)"
+            [disableRipple]="true"
+            [selectable]="false"
+          >
+            {{ option.label }}
+          </mat-chip-option>
+          }
+        </mat-chip-set>
+      </article>
+    </div>
+
+    <div class="filters__categories">
+      <div class="filters__categories-header">
+        <div>
+          <p class="filters__categories-title">Categorías</p>
+          <span>{{ selectedCategories().size || 'Todas' }}</span>
+        </div>
+        <button
+          mat-stroked-button
+          type="button"
+          class="filters__clear"
+          (click)="clearCategories()"
+          [disabled]="selectedCategories().size === 0"
+        >
+          Limpiar
+        </button>
+      </div>
+      <mat-chip-set
+        class="filters__chips filters__chips--scroll"
+        role="listbox"
+        aria-label="Filtrar por categoría"
       >
-        {{ option.label }}
-      </mat-chip-option>
-      }
-    </mat-chip-set>
+        <mat-chip-option
+          [selected]="selectedCategories().size === 0"
+          (click)="clearCategories()"
+          [disableRipple]="true"
+          [selectable]="false"
+        >
+          Todas
+        </mat-chip-option>
+        @for (option of categoryOptions(); track option.value) {
+        <mat-chip-option
+          [selected]="selectedCategories().has(option.value)"
+          (click)="toggleCategory(option.value)"
+          [disableRipple]="true"
+          [selectable]="false"
+        >
+          {{ option.value }} <span class="chip__badge">{{ option.count }}</span>
+        </mat-chip-option>
+        }
+      </mat-chip-set>
+    </div>
   </section>
 
   @if (loading()) {
