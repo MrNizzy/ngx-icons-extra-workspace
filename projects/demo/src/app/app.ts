@@ -86,6 +86,9 @@ export class App implements OnInit {
 
   private readonly dialog = inject(MatDialog);
 
+  protected readonly skeletonCards = Array.from({ length: 6 }, (_, index) => index);
+  protected readonly skeletonChips = Array.from({ length: 4 }, (_, index) => index);
+
   protected readonly paletteOptions: { value: PaletteFilter; label: string }[] = [
     { value: 'all', label: 'Todas las paletas' },
     { value: 'mono', label: 'Monocromáticas' },

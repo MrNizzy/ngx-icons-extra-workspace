@@ -79,7 +79,7 @@
     <div class="state state--empty">
       <p>No encontramos colecciones con ese criterio.</p>
     </div>
-    } @else { @for (group of groupedCollections(); track group.category) {
+    } @else { @for (group of groupedCollections(); track group.category) { @defer (on viewport) {
     <section class="group">
       <header class="group__header">
         <div>
@@ -88,8 +88,6 @@
         </div>
         <span class="group__meta">{{ group.items.length }} sets</span>
       </header>
-
-      @defer (on viewport) {
       <div class="group__grid">
         @for (item of group.items; track item.id) {
         <mat-card
@@ -122,11 +120,32 @@
         </mat-card>
         }
       </div>
-      } @placeholder{
-      <mat-progress-spinner diameter="56" mode="indeterminate" />
-      }
     </section>
-    } }
+    } @placeholder{
+    <section class="group group--skeleton" aria-hidden="true">
+      <header class="group__header">
+        <div>
+          <div class="skeleton skeleton-eyebrow"></div>
+          <div class="skeleton skeleton-title"></div>
+        </div>
+        <div class="skeleton skeleton-meta"></div>
+      </header>
+      <div class="group__grid">
+        @for (card of skeletonCards; track card) {
+        <article class="collection-card skeleton-card">
+          <div class="skeleton skeleton-heading"></div>
+          <div class="skeleton skeleton-subheading"></div>
+          <div class="skeleton skeleton-license"></div>
+          <div class="skeleton-chip-row">
+            @for (chip of skeletonChips; track chip) {
+            <div class="skeleton skeleton-chip"></div>
+            }
+          </div>
+        </article>
+        }
+      </div>
+    </section>
+    } } }
   </section>
   }
 </main>
