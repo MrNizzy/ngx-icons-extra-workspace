@@ -8,9 +8,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "paths": {
-      "ngx-icons-extra": [
-        "./dist/ngx-icons-extra"
-      ]
+      "ngx-icons-extra": ["./dist/ngx-icons-extra"]
     },
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,

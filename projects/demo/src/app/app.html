@@ -1,2 +1,132 @@
-<ngx-icon collection="tabler" icon="home" width="200" height="200" />
-<router-outlet />
+<main class="app-shell">
+  <div class="hero__text">
+    <p class="hero__eyebrow">Iconify + Angular</p>
+    <h1 class="hero__title">NGX-ICON</h1>
+    <p class="hero__subtitle">
+      Iconos listos para tus interfaces con Angular + Iconify. Hecho con ❤️ por
+      <a href="https://github.com/mrnizzy" target="_blank">MrNizzy</a>
+    </p>
+  </div>
+  <div class="hero__actions">
+    <button
+      mat-stroked-button
+      color="accent"
+      type="button"
+      class="refresh"
+      [disabled]="loading()"
+      (click)="refresh()"
+    >
+      Actualizar
+      <mat-icon>
+        <ngx-icon collection="material-symbols" icon="refresh" />
+      </mat-icon>
+    </button>
+  </div>
+
+  <section class="filters">
+    <mat-form-field class="filters__search" appearance="outline">
+      <mat-label>Buscar colecciones</mat-label>
+      <input
+        matInput
+        type="search"
+        placeholder="Material Symbols, Tabler, Solar..."
+        [value]="search()"
+        #searchInput
+        (input)="setSearch(searchInput.value)"
+      />
+      @if (search()) {
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        aria-label="Limpiar búsqueda"
+        (click)="setSearch('')"
+      >
+        ✕
+      </button>
+      }
+    </mat-form-field>
+
+    <mat-chip-set class="filters__chips" role="listbox" aria-label="Filtrar por paleta">
+      @for (option of paletteOptions; track option.value) {
+      <mat-chip-option
+        [selected]="paletteFilter() === option.value"
+        (click)="setPalette(option.value)"
+        [disableRipple]="true"
+        [selectable]="false"
+      >
+        {{ option.label }}
+      </mat-chip-option>
+      }
+    </mat-chip-set>
+  </section>
+
+  @if (loading()) {
+  <section class="state state--loading" aria-live="polite">
+    <mat-progress-spinner diameter="56" mode="indeterminate" />
+    <p>Cargando colecciones...</p>
+  </section>
+  } @else if (error()) {
+  <section class="state state--error" aria-live="assertive">
+    <p>{{ error() }}</p>
+    <button mat-flat-button color="accent" type="button" (click)="refresh()">
+      Intentar de nuevo
+    </button>
+  </section>
+  } @else {
+  <section class="groups" aria-live="polite">
+    @if (!groupedCollections().length) {
+    <div class="state state--empty">
+      <p>No encontramos colecciones con ese criterio.</p>
+    </div>
+    } @else { @for (group of groupedCollections(); track group.category) {
+    <section class="group">
+      <header class="group__header">
+        <div>
+          <p class="group__eyebrow">Categoría</p>
+          <h2 class="group__title">{{ group.category }}</h2>
+        </div>
+        <span class="group__meta">{{ group.items.length }} sets</span>
+      </header>
+
+      @defer (on viewport) {
+      <div class="group__grid">
+        @for (item of group.items; track item.id) {
+        <mat-card
+          class="collection-card"
+          role="button"
+          tabindex="0"
+          (click)="openCollection(item)"
+          (keydown.enter)="openCollection(item)"
+        >
+          <mat-card-header>
+            <mat-card-title>{{ item.details.name }}</mat-card-title>
+            <mat-card-subtitle
+              >{{ item.details.total }} íconos • v{{ item.details.version }}</mat-card-subtitle
+            >
+          </mat-card-header>
+          <mat-card-content>
+            <p class="collection-card__license">
+              {{ item.details.license.title }} · {{ item.details.author.name }}
+            </p>
+            <div class="collection-card__samples">
+              @for (sample of item.samples; track sample; let i = $index) { @if (i < 4) {
+              <button matIconButton type="button">
+                <mat-icon>
+                  <ngx-icon [collection]="item.id" [icon]="sample" />
+                </mat-icon>
+              </button>
+              } }
+            </div>
+          </mat-card-content>
+        </mat-card>
+        }
+      </div>
+      } @placeholder{
+      <mat-progress-spinner diameter="56" mode="indeterminate" />
+      }
+    </section>
+    } }
+  </section>
+  }
+</main>

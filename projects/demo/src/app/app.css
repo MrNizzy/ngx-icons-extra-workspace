@@ -1,0 +1,234 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--mat-sys-primary) 6%, transparent),
+      transparent 220px
+    ),
+    var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: clamp(1rem, 2vw, 2rem);
+  width: 95%;
+  margin: 0 auto;
+}
+
+.hero {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  padding: clamp(1.25rem, 2vw, 2rem);
+  background: var(--mat-sys-surface-container-highest);
+  border: 1px solid var(--mat-sys-outline-variant);
+  display: flex;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.hero__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hero__eyebrow {
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.hero__title {
+  word-break: break-word;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 600;
+}
+
+.hero__subtitle {
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.hero__actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.brand__eyebrow {
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.brand__title {
+  margin: 0;
+  font-size: clamp(1.6rem, 5vw, 2.5rem);
+  font-weight: 600;
+}
+
+.brand__subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.refresh {
+  border-color: var(--mat-sys-primary);
+  color: var(--mat-sys-primary);
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.filters__search {
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+.filters__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.state {
+  display: grid;
+  place-items: center;
+  padding: 3rem 1rem;
+  background: var(--mat-sys-surface-container);
+  border-radius: 1rem;
+  border: 1px dashed var(--mat-sys-outline-variant);
+  text-align: center;
+  gap: 1rem;
+  color: var(--mat-sys-on-surface);
+}
+
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.group {
+  background: var(--mat-sys-surface-container-low);
+  border-radius: 1.25rem;
+  padding: 1.5rem clamp(1rem, 3vw, 2rem);
+}
+
+.group__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.group__title {
+  margin: 0.75rem 0;
+  font-size: clamp(1.6rem, 5vw, 2.5rem);
+  font-weight: 600;
+}
+
+.group__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.group__meta {
+  font-size: 0.85rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.group__grid {
+  margin-top: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.collection-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease-in-out;
+  --mat-elevation: var(--mat-elevation-z2);
+
+  background: var(--mat-sys-surface);
+  box-shadow: var(--mat-sys-level2);
+
+  &:hover {
+    background: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+    --mat-elevation: var(--mat-elevation-z3);
+    transform: scale(1.03);
+    transition: transform 0.2s ease-in-out;
+  }
+}
+
+.collection-card:hover {
+  box-shadow: var(--mat-sys-level3);
+}
+
+.collection-card__license {
+  font-size: 0.85rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.collection-card__samples {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--mat-sys-surface-container-low);
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+}
+
+.collection-card__sample {
+  display: flex;
+  gap: 0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--mat-sys-primary) 12%, transparent);
+  box-shadow: var(--mat-sys-level1);
+}
+
+@media (min-width: 768px) {
+  .filters {
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+  }
+}

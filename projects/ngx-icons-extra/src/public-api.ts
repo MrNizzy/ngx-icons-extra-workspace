@@ -3,4 +3,3 @@
  */
 
 export * from './lib/ngx-icons-extra';
-export * from './models/collections';
