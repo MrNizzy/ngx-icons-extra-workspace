@@ -5,11 +5,12 @@ import { Observable, of } from 'rxjs';
 import { map, shareReplay, tap } from 'rxjs/operators';
 
 export interface IconRequestOptions {
-  width?: string;
-  height?: string;
-  color?: string;
-  flip?: string;
-  rotate?: string;
+  width?: string | number; // width dimension of icon
+  height?: string | number; // height dimension of icon
+  color?: string; // Replaces currentColor with specific color, resulting in icon with hardcoded palette
+  flip?: 'horizontal' | 'vertical' | 'horizontal,vertical'; // flip icon
+  rotate?: string | number; // Rotate icon by 90, 180 or 270 degrees
+  box?: boolean; // Adds an empty rectangle to SVG that matches viewBox
 }
 
 @Injectable({

@@ -1,0 +1,379 @@
+<section class="icon-page">
+  <header class="icon-hero">
+    <div class="icon-hero__cta">
+      <button mat-stroked-button type="button" (click)="goBack()">
+        <mat-icon>
+          <ngx-icon collection="material-symbols" icon="arrow-back" />
+        </mat-icon>
+        Volver a la colección
+      </button>
+    </div>
+    <div class="icon-hero__content">
+      <p class="icon-hero__eyebrow">Icono destacado</p>
+      <h1>
+        {{ iconName() }}
+        <span>/ {{ prefix() }}</span>
+      </h1>
+      <div class="icon-hero__meta">
+        <article class="meta-chip">
+          <span>Tamaño</span>
+          <strong>
+            @if (enableSize()) {
+            {{ size() }} px } @else { Automático }
+          </strong>
+        </article>
+        <article class="meta-chip">
+          <span>Flip</span>
+          <strong>
+            @if (enableFlip() && flip()) {
+            {{ flip() }}
+            } @else { Ninguno }
+          </strong>
+        </article>
+        <article class="meta-chip">
+          <span>Color</span>
+          <strong>
+            @if (enableColor()) {
+            {{ color() }}
+            } @else { Hereda }
+          </strong>
+        </article>
+        <article class="meta-chip">
+          <span>Rotación</span>
+          <strong>
+            @if (enableRotate()) {
+            {{ rotate() }}° } @else { Ninguna }
+          </strong>
+        </article>
+      </div>
+      <div class="icon-hero__actions">
+        <button mat-flat-button color="primary" type="button" (click)="copySnippet()">
+          Copiar snippet
+        </button>
+        <button mat-stroked-button type="button" (click)="copyIconName()">Copiar nombre</button>
+        <button mat-icon-button matTooltip="Copiar SVG" type="button" (click)="copySvg()">
+          <mat-icon>
+            <ngx-icon collection="material-symbols" icon="content-copy" />
+          </mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Descargar SVG" type="button" (click)="downloadSvg()">
+          <mat-icon>
+            <ngx-icon collection="material-symbols" icon="download" />
+          </mat-icon>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="icon-workbench">
+    <article class="panel icon-preview" [class.icon-preview--grid]="showGrid()">
+      <header class="panel__header">
+        <div>
+          <p class="eyebrow">Previsualización</p>
+          <span>{{ prefix() }} / {{ iconName() }}</span>
+        </div>
+        <button mat-button type="button" (click)="showGrid.set(!showGrid())">
+          <mat-icon>
+            <ngx-icon collection="material-symbols" [icon]="showGrid() ? 'grid-off' : 'grid-on'" />
+          </mat-icon>
+          {{ showGrid() ? 'Ocultar cuadrícula' : 'Mostrar cuadrícula' }}
+        </button>
+      </header>
+
+      <div class="icon-preview__canvas" [style.background-color]="`invert(${color()})`">
+        <ngx-icon
+          #iconEl
+          class="icon-preview__icon"
+          [collection]="prefix()"
+          [icon]="iconName()"
+          [width]="sizeAttr()"
+          [height]="sizeAttr()"
+          [color]="colorAttr()"
+          [flip]="flipAttr()"
+          [rotate]="rotateAttr()"
+        />
+      </div>
+    </article>
+
+    <article class="panel icon-controls">
+      <section class="control" [class.control--disabled]="!enableSize()">
+        <div class="control__header">
+          <div class="control__stack">
+            <p class="control__label">Tamaño</p>
+            <span class="control__value">
+              @if (enableSize()) {
+              {{ size() }} px } @else { Automático }
+            </span>
+          </div>
+          <div class="control__status">
+            <span class="status-pill" [class.status-pill--active]="enableSize()">Personalizar</span>
+            <mat-slide-toggle
+              class="control__toggle"
+              color="primary"
+              [checked]="enableSize()"
+              (change)="enableSize.set($event.checked)"
+            >
+              <span class="visually-hidden">Alternar tamaño fijo</span>
+            </mat-slide-toggle>
+          </div>
+        </div>
+        <div class="control__surface">
+          <mat-slider min="48" max="320" step="8" [disabled]="!enableSize()">
+            <input matSliderThumb [(ngModel)]="size" />
+          </mat-slider>
+          <small class="control__hint">Arrastra para definir un tamaño fijo.</small>
+        </div>
+      </section>
+
+      <section class="control" [class.control--disabled]="!enableFlip()">
+        <div class="control__header">
+          <div class="control__stack">
+            <p class="control__label">Flip</p>
+            <span class="control__value">
+              @if (enableFlip() && flip()) {
+              {{ flip() }} } @else { Ninguno }
+            </span>
+          </div>
+          <div class="control__status">
+            <span class="status-pill" [class.status-pill--active]="enableFlip()">Personalizar</span>
+            <mat-slide-toggle
+              class="control__toggle"
+              color="primary"
+              [checked]="enableFlip()"
+              (change)="enableFlip.set($event.checked)"
+            >
+              <span class="visually-hidden">Alternar flip</span>
+            </mat-slide-toggle>
+          </div>
+        </div>
+        <div class="control__surface">
+          <mat-form-field appearance="outline">
+            <mat-label>Flip</mat-label>
+            <mat-select [(ngModel)]="flip" [disabled]="!enableFlip()">
+              <mat-option value="horizontal">Horizontal</mat-option>
+              <mat-option value="vertical">Vertical</mat-option>
+              <mat-option value="horizontal,vertical">Horizontal y vertical</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <small class="control__hint">Invierte el icono en los ejes seleccionados.</small>
+        </div>
+      </section>
+
+      <section class="control control--dual" [class.control--disabled]="!enableColor()">
+        <div class="control__header">
+          <div class="control__stack">
+            <p class="control__label">Color</p>
+            <span class="control__value">
+              @if (enableColor()) {
+              {{ color() }} } @else { Hereda }
+            </span>
+          </div>
+          <div class="control__status">
+            <span class="status-pill" [class.status-pill--active]="enableColor()"
+              >Personalizar</span
+            >
+            <mat-slide-toggle
+              class="control__toggle"
+              color="primary"
+              [checked]="enableColor()"
+              (change)="enableColor.set($event.checked)"
+            >
+              <span class="visually-hidden">Alternar color personalizado</span>
+            </mat-slide-toggle>
+          </div>
+        </div>
+        <div class="control__surface">
+          <div class="color-field" [class.color-field--disabled]="!enableColor()">
+            <label>Color</label>
+            <div class="color-field__input">
+              <input
+                type="color"
+                [value]="color()"
+                [(ngModel)]="color"
+                [disabled]="!enableColor()"
+              />
+              <span class="color-field__value">{{ color() }}</span>
+            </div>
+          </div>
+          <small class="control__hint">Si está desactivado, el icono usa currentColor.</small>
+        </div>
+      </section>
+
+      <section class="control" [class.control--disabled]="!enableRotate()">
+        <div class="control__header">
+          <div class="control__stack">
+            <p class="control__label">Rotación</p>
+            <span class="control__value">
+              @if (enableRotate()) {
+              {{ rotate() }}° } @else { Ninguna }
+            </span>
+          </div>
+          <div class="control__status">
+            <span class="status-pill" [class.status-pill--active]="enableRotate()"
+              >Personalizar</span
+            >
+            <mat-slide-toggle
+              class="control__toggle"
+              color="primary"
+              [checked]="enableRotate()"
+              (change)="enableRotate.set($event.checked)"
+            >
+              <span class="visually-hidden">Alternar rotación</span>
+            </mat-slide-toggle>
+          </div>
+        </div>
+        <div class="control__surface">
+          <mat-form-field appearance="outline">
+            <mat-label>Rotación</mat-label>
+            <mat-select [(ngModel)]="rotate" [disabled]="!enableRotate()">
+              @for (option of rotateOptions; track option) {
+              <mat-option [value]="option">{{ option }}°</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <small class="control__hint">Aplica giros suaves de 45° para resaltar el icono.</small>
+        </div>
+      </section>
+    </article>
+
+    <article class="panel icon-usage">
+      <header class="panel__header">
+        <div>
+          <p class="eyebrow">Uso en Angular</p>
+          <h2>Snippet</h2>
+        </div>
+        <button mat-icon-button type="button" (click)="copySnippet()" matTooltip="Copiar snippet">
+          <mat-icon>
+            <ngx-icon collection="material-symbols" icon="content-copy" />
+          </mat-icon>
+        </button>
+      </header>
+      <pre class="code-block"><code>{{ snippet() }}</code></pre>
+    </article>
+  </section>
+
+  <section class="icon-reference">
+    <article class="panel reference-scale">
+      <header class="panel__header">
+        <div>
+          <p class="eyebrow">Escala</p>
+          <h2>Consistencia visual</h2>
+        </div>
+        <span>Vista previa responsive</span>
+      </header>
+      <div class="scale-grid">
+        @for (sample of sizeSamples; track sample) {
+        <div class="scale-item">
+          <ngx-icon
+            [collection]="prefix()"
+            [icon]="iconName()"
+            [width]="sample + 'px'"
+            [height]="sample + 'px'"
+          />
+          <span>{{ sample }} px</span>
+        </div>
+        }
+      </div>
+    </article>
+
+    <article class="panel reference-strokes">
+      <header class="panel__header">
+        <div>
+          <p class="eyebrow">Flip</p>
+          <h2>Flipped</h2>
+        </div>
+        <span>Comparativa rápida</span>
+      </header>
+      <div class="stroke-grid">
+        @for (sample of flipSamples; track sample) {
+        <div class="stroke-item">
+          <ngx-icon
+            [collection]="prefix()"
+            [icon]="iconName()"
+            width="56px"
+            height="56px"
+            [flip]="sample"
+          />
+          <span>{{ sample }}</span>
+        </div>
+        }
+      </div>
+    </article>
+
+    <article class="panel reference-rotation">
+      <header class="panel__header">
+        <div>
+          <p class="eyebrow">Rotación</p>
+          <h2>Giros disponibles</h2>
+        </div>
+        <span>Ejemplos aplicados</span>
+      </header>
+      <div class="rotation-grid">
+        @for (sample of rotateSamples; track sample) {
+        <div class="rotation-item">
+          <ngx-icon
+            [collection]="prefix()"
+            [icon]="iconName()"
+            width="56px"
+            height="56px"
+            [rotate]="sample"
+          />
+          <span>{{ sample }}°</span>
+        </div>
+        }
+      </div>
+    </article>
+
+    <article class="panel reference-ui">
+      <header class="panel__header">
+        <div>
+          <p class="eyebrow">Demo UI</p>
+          <h2>Aplicado en componentes</h2>
+        </div>
+        <span>Botones · tarjetas · estados</span>
+      </header>
+      <div class="ui-grid">
+        <div class="ui-card ui-card--cta">
+          <button mat-flat-button color="primary">
+            <mat-icon>
+              <ngx-icon [collection]="prefix()" [icon]="iconName()" width="20px" height="20px" />
+            </mat-icon>
+            Añadir elemento
+          </button>
+        </div>
+        <div class="ui-card ui-card--list">
+          <div class="list-row">
+            <ngx-icon [collection]="prefix()" [icon]="iconName()" width="24px" height="24px" />
+            <div>
+              <p>Estado activo</p>
+              <span>El icono se usa como indicador</span>
+            </div>
+          </div>
+          <div class="list-row list-row--muted">
+            <ngx-icon
+              [collection]="prefix()"
+              [icon]="iconName()"
+              width="24px"
+              height="24px"
+              color="var(--mat-sys-on-surface-variant)"
+            />
+            <div>
+              <p>Estado inactivo</p>
+              <span>Tono de superficie variante</span>
+            </div>
+          </div>
+        </div>
+        <div class="ui-card ui-card--badges">
+          <div class="badge">
+            <ngx-icon [collection]="prefix()" [icon]="iconName()" width="16px" height="16px" />
+            Notificación
+          </div>
+          <div class="badge badge--outline">
+            <ngx-icon [collection]="prefix()" [icon]="iconName()" width="16px" height="16px" />
+            Estado
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+</section>

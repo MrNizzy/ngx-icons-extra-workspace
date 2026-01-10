@@ -3,3 +3,4 @@
  */
 
 export * from './lib/ngx-icons-extra';
+export * from './lib/iconify.service';

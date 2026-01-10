@@ -140,12 +140,18 @@
         @for (chunk of section.chunks; track chunkTrack(chunk)) { @defer (on viewport) {
         <div class="icons-grid">
           @for (icon of chunk; track icon) {
-          <article class="icon-card">
+          <article
+            class="icon-card"
+            role="button"
+            tabindex="0"
+            (click)="goToIcon(icon)"
+            (keydown.enter)="goToIcon(icon)"
+          >
             <button
               matIconButton
               type="button"
               class="icon-card__copy"
-              (click)="copy(icon)"
+              (click)="copy(icon, $event)"
               aria-label="Copiar HTML"
               matTooltip="Copiar snippet"
             >

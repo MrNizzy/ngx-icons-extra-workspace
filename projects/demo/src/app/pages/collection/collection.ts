@@ -183,7 +183,8 @@ export class Collection implements OnInit {
     this.selectedCategory.set(category);
   }
 
-  protected copy(icon: string): void {
+  protected copy(icon: string, event?: Event): void {
+    event?.stopPropagation();
     const prefix = this.currentId();
     const snippet = `<ngx-icon collection="${prefix}" icon="${icon}" />`;
     navigator.clipboard.writeText(snippet);
@@ -192,6 +193,11 @@ export class Collection implements OnInit {
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
     });
+  }
+
+  protected goToIcon(icon: string): void {
+    const prefix = this.currentId();
+    this.router.navigate(['collections', prefix, icon]);
   }
 
   protected chunkTrack(chunk: string[]): string {

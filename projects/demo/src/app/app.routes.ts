@@ -10,6 +10,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/collection/collection').then((m) => m.Collection),
   },
   {
+    path: 'collections/:id/:icon',
+    loadComponent: () => import('./pages/icon/icon').then((m) => m.IconPage),
+  },
+  {
     path: '**',
     redirectTo: '',
   },
