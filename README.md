@@ -1,5 +1,13 @@
 # NgxIconsExtra
 
+[![npm version](https://badge.fury.io/js/ngx-icons-extra.svg)](https://badge.fury.io/js/ngx-icons-extra)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Angular](https://img.shields.io/badge/Angular-21+-red.svg)](https://angular.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org)
+[![Bundle Size](https://img.shields.io/bundlephobia/minzip/ngx-icons-extra)](https://bundlephobia.com/package/ngx-icons-extra)
+[![Downloads](https://img.shields.io/npm/dm/ngx-icons-extra.svg)](https://www.npmjs.com/package/ngx-icons-extra)
+[![Demo](https://img.shields.io/badge/demo-online-brightgreen.svg)](https://ngx-icons-extra.pages.dev)
+
 Una librería Angular para mostrar íconos de Iconify con rendimiento optimizado y experiencia de desarrollo moderna.
 
 ## 🚀 Características
@@ -192,6 +200,7 @@ export class ExampleComponent {
 
 Puedes ver una demostración interactiva de la librería en:
 
+- **Demo online**: [https://ngx-icons-extra.pages.dev/](https://ngx-icons-extra.pages.dev/)
 - **Demo local**: Ejecuta `ng serve` y navega a `http://localhost:4200`
 - **Explorador de íconos**: Navega a `/collections/{prefix}` para explorar cualquier colección
 
