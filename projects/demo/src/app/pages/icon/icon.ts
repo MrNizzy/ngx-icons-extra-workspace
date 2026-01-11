@@ -47,7 +47,7 @@ export class IconPage implements OnInit {
 
   readonly prefix = signal('');
   readonly iconName = signal('');
-  readonly size = signal(160);
+  readonly size = signal(140);
   readonly color = signal('#1f1f1f');
   readonly background = signal('#ffffff');
   readonly showGrid = signal(true);
@@ -62,13 +62,13 @@ export class IconPage implements OnInit {
   readonly rotateSamples: IconRequestOptions['rotate'][] = [45, 90, 135];
   readonly rotateOptions: IconRequestOptions['rotate'][] = [0, 45, 90, 135, 180];
 
-  readonly enableSize = signal(true);
-  readonly enableColor = signal(true);
+  readonly enableSize = signal(false);
+  readonly enableColor = signal(false);
   readonly enableFlip = signal(false);
   readonly enableRotate = signal(false);
 
   readonly sizePx = computed(() => `${this.size()}px`);
-  readonly sizeAttr = computed(() => (this.enableSize() ? this.sizePx() : undefined));
+  readonly sizeAttr = computed(() => (this.enableSize() ? this.sizePx() : '140px'));
   readonly colorAttr = computed(() => (this.enableColor() ? this.color() : undefined));
   readonly flipAttr = computed(() => (this.enableFlip() ? this.flip() : undefined));
   readonly rotateAttr = computed(() => (this.enableRotate() ? this.rotate() : undefined));
@@ -76,14 +76,14 @@ export class IconPage implements OnInit {
   readonly snippet = computed(() => {
     const attributes = [`collection="${this.prefix()}"`, `icon="${this.iconName()}"`];
 
-    const size = this.sizeAttr();
+    if (this.enableSize()) {
+      const size = this.sizeAttr();
+      attributes.push(`width="${size}"`, `height="${size}"`);
+    }
+
     const color = this.colorAttr();
     const flip = this.flipAttr();
     const rotate = this.rotateAttr();
-
-    if (size) {
-      attributes.push(`width="${size}"`, `height="${size}"`);
-    }
 
     if (color) {
       attributes.push(`color="${color}"`);

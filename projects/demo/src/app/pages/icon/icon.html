@@ -35,7 +35,7 @@
           <strong>
             @if (enableColor()) {
             {{ color() }}
-            } @else { Hereda }
+            } @else { Heredado (currentColor) }
           </strong>
         </article>
         <article class="meta-chip">
@@ -81,6 +81,17 @@
       </header>
 
       <div class="icon-preview__canvas" [style.background-color]="`invert(${color()})`">
+        <button
+          mat-icon-button
+          class="icon-preview__copy-btn"
+          type="button"
+          (click)="copySnippet()"
+          matTooltip="Copiar snippet con opciones actuales"
+        >
+          <mat-icon>
+            <ngx-icon collection="material-symbols" icon="content-copy" />
+          </mat-icon>
+        </button>
         <ngx-icon
           #iconEl
           class="icon-preview__icon"
@@ -234,21 +245,6 @@
           <small class="control__hint">Aplica giros suaves de 45° para resaltar el icono.</small>
         </div>
       </section>
-    </article>
-
-    <article class="panel icon-usage">
-      <header class="panel__header">
-        <div>
-          <p class="eyebrow">Uso en Angular</p>
-          <h2>Snippet</h2>
-        </div>
-        <button mat-icon-button type="button" (click)="copySnippet()" matTooltip="Copiar snippet">
-          <mat-icon>
-            <ngx-icon collection="material-symbols" icon="content-copy" />
-          </mat-icon>
-        </button>
-      </header>
-      <pre class="code-block"><code>{{ snippet() }}</code></pre>
     </article>
   </section>
 

@@ -38,10 +38,16 @@ export class NgxIcon {
 
   readonly svg = signal<SafeHtml | null>(null);
 
-  private readonly renderEffect = effect(
-    () => {
+  constructor() {
+    effect((onCleanup) => {
       const collection = this.collection();
       const icon = this.icon();
+
+      if (!collection || !icon) {
+        this.svg.set(null);
+        return;
+      }
+
       const options = {
         width: this.width(),
         height: this.height(),
@@ -50,12 +56,11 @@ export class NgxIcon {
         rotate: this.rotate(),
       };
 
-      const subscription = this.iconify.loadIcon(collection, icon, options).subscribe((svg) => {
-        this.svg.set(svg);
-      });
+      const sub = this.iconify
+        .loadIcon(collection, icon, options)
+        .subscribe((svg) => this.svg.set(svg));
 
-      return () => subscription.unsubscribe();
-    },
-    { allowSignalWrites: true }
-  );
+      onCleanup(() => sub.unsubscribe());
+    });
+  }
 }

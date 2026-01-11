@@ -118,10 +118,9 @@
 }
 
 .icon-workbench {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
   gap: 1.5rem;
-  align-items: start;
 }
 
 .icon-preview {
@@ -134,9 +133,9 @@
   background: var(--mat-sys-surface-container-high);
   border: 1px solid color-mix(in srgb, var(--mat-sys-outline-variant) 40%, transparent);
   box-shadow: 0 25px 60px color-mix(in srgb, var(--mat-sys-primary) 10%, transparent);
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 1.25rem;
-  flex: 1;
 }
 
 .panel__header {
@@ -155,12 +154,25 @@
 }
 
 .icon-preview__canvas {
+  display: flex;
   border-radius: 1.5rem;
   padding: 2rem;
   background: var(--mat-sys-surface);
   place-items: center;
-  height: 100%;
+  flex: 1;
   border: 1px solid color-mix(in srgb, var(--mat-sys-outline-variant) 35%, transparent);
+  position: relative;
+}
+
+.icon-preview__copy-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--mat-sys-surface-container);
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline-variant) 40%, transparent);
+  cursor: pointer;
+  z-index: 1;
+  transition: all 0.2s ease;
 }
 
 .icon-preview--grid .icon-preview__canvas {
@@ -494,11 +506,6 @@
 }
 
 @media (max-width: 640px) {
-  .icon-hero__actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
   .panel {
     padding: 1.25rem;
   }
