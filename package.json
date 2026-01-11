@@ -8,7 +8,12 @@
     "lib:watch": "ng build ngx-icons-extra --watch --configuration development",
     "build": "ng build demo",
     "watch": "ng build demo --watch --configuration development",
-    "test": "ng test demo"
+    "test": "ng test demo",
+    "lib:version:patch": "cd projects/ngx-icons-extra && npm version patch --no-git-tag-version",
+    "lib:version:minor": "cd projects/ngx-icons-extra && npm version minor --no-git-tag-version",
+    "lib:version:major": "cd projects/ngx-icons-extra && npm version major --no-git-tag-version",
+    "lib:publish": "npm run lib:build && cd dist/ngx-icons-extra && npm publish",
+    "lib:publish:dry": "npm run lib:build && cd dist/ngx-icons-extra && npm pack --dry-run"
   },
   "prettier": {
     "printWidth": 100,
