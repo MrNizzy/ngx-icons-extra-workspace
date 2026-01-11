@@ -1,59 +1,254 @@
-# NgxIconsWorkspace
+# NgxIconsExtra
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.8.
+Una librería Angular para mostrar íconos de Iconify con rendimiento optimizado y experiencia de desarrollo moderna.
 
-## Development server
+## 🚀 Características
 
-To start a local development server, run:
+- **Rendimiento optimizado** con `OnPush` change detection
+- **API moderna** usando signals de Angular
+- **Standalone components** - compatible con Angular 21+
+- **Más de 100,000 íconos** de todas las colecciones de Iconify
+- **Personalización completa** con tamaño, color, rotación y flip
+- **TypeScript completo** con tipado estricto
+- **Bundle optimizado** con tree-shaking
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 📦 Instalación
 
 ```bash
-ng generate component component-name
+npm install ngx-icons-extra
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🛠️ Configuración
+
+### 1. Configurar HttpClient
+
+El servicio `IconifyService` necesita `HttpClient` para obtener los íconos de la API de Iconify. En tu `app.config.ts`:
+
+```typescript
+import { provideHttpClient, withFetch } from '@angular/common/http';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(withFetch()),
+    // ... otros providers
+  ],
+};
+```
+
+### 2. Usar el componente
+
+```typescript
+import { NgxIcon } from 'ngx-icons-extra';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-example',
+  standalone: true,
+  imports: [NgxIcon],
+  template: ` <ngx-icon collection="mdi" icon="home" /> `,
+})
+export class ExampleComponent {}
+```
+
+## 📖 Uso Básico
+
+### Sintaxis básica
+
+```html
+<!-- Icono simple -->
+<ngx-icon collection="mdi" icon="home" />
+
+<!-- Con tamaño personalizado -->
+<ngx-icon collection="mdi" icon="home" width="24" height="24" />
+
+<!-- Con color -->
+<ngx-icon collection="mdi" icon="home" color="#ff6b6b" />
+
+<!-- Con rotación -->
+<ngx-icon collection="mdi" icon="home" rotate="90deg" />
+
+<!-- Con flip -->
+<ngx-icon collection="mdi" icon="home" flip="horizontal" />
+```
+
+### Colecciones populares
+
+| Colección             | Prefijo     | Ejemplo                                           |
+| --------------------- | ----------- | ------------------------------------------------- |
+| Material Design Icons | `mdi`       | `<ngx-icon collection="mdi" icon="home" />`       |
+| Font Awesome          | `fa`        | `<ngx-icon collection="fa" icon="home" />`        |
+| Heroicons             | `heroicons` | `<ngx-icon collection="heroicons" icon="home" />` |
+| Tabler Icons          | `tabler`    | `<ngx-icon collection="tabler" icon="home" />`    |
+| Lucide                | `lucide`    | `<ngx-icon collection="lucide" icon="home" />`    |
+
+## 🎨 Personalización Avanzada
+
+### Props disponibles
+
+| Prop         | Tipo                 | Descripción             | Ejemplo                       |
+| ------------ | -------------------- | ----------------------- | ----------------------------- |
+| `collection` | `string` (requerido) | Prefijo de la colección | `"mdi"`                       |
+| `icon`       | `string` (requerido) | Nombre del ícono        | `"home"`                      |
+| `width`      | `string \| number`   | Ancho del ícono         | `"24"` o `24`                 |
+| `height`     | `string \| number`   | Alto del ícono          | `"24"` o `24`                 |
+| `color`      | `string`             | Color del ícono         | `"#ff6b6b"`                   |
+| `rotate`     | `string`             | Rotación                | `"90deg"`                     |
+| `flip`       | `string`             | Volteo                  | `"horizontal"` o `"vertical"` |
+
+### Ejemplos prácticos
+
+```html
+<!-- Botón con ícono -->
+<button mat-button>
+  <ngx-icon collection="mdi" icon="download" width="20" height="20" />
+  Descargar
+</button>
+
+<!-- Icono animado con hover -->
+<ngx-icon
+  collection="mdi"
+  icon="heart"
+  color="#e74c3c"
+  style="transition: transform 0.2s; cursor: pointer;"
+  (mouseenter)="rotate = '45deg'"
+  (mouseleave)="rotate = '0deg'"
+  [rotate]="rotate"
+/>
+
+<!-- Icono responsive -->
+<ngx-icon collection="heroicons" icon="user" width="100%" height="100%" />
+```
+
+## 🔧 Configuración del Servicio
+
+Para configuración avanzada, puedes inyectar el `IconifyService`:
+
+```typescript
+import { IconifyService } from 'ngx-icons-extra';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-example',
+  standalone: true,
+  imports: [NgxIcon],
+  template: `<!-- template -->`,
+})
+export class ExampleComponent {
+  private iconify = inject(IconifyService);
+
+  loadCustomIcon() {
+    this.iconify
+      .loadIcon('mdi', 'home', {
+        width: 32,
+        height: 32,
+        color: '#primary',
+      })
+      .subscribe((svg) => {
+        console.log('SVG loaded:', svg);
+      });
+  }
+}
+```
+
+## 🎯 Mejores Prácticas
+
+### 1. Usa tamaños consistentes
+
+```html
+<!-- ✅ Bueno - usa unidades consistentes -->
+<ngx-icon collection="mdi" icon="home" width="24" height="24" />
+
+<!-- ❌ Evita - mezcla unidades -->
+<ngx-icon collection="mdi" icon="home" width="24px" height="2rem" />
+```
+
+### 2. Aprovecha el responsive
+
+```html
+<!-- ✅ Bueno - responsive con CSS -->
+<div class="icon-container">
+  <ngx-icon collection="mdi" icon="home" width="100%" height="100%" />
+</div>
+
+<style>
+  .icon-container {
+    width: 24px;
+    height: 24px;
+  }
+</style>
+```
+
+### 3. Prefiere colecciones ligeras
+
+```html
+<!-- ✅ Bueno - colección específica -->
+<ngx-icon collection="mdi" icon="home" />
+
+<!-- ❌ Evita - colecciones muy grandes si no es necesario -->
+<ngx-icon collection="icon-park" icon="home" />
+```
+
+## 🌐 Demo
+
+Puedes ver una demostración interactiva de la librería en:
+
+- **Demo local**: Ejecuta `ng serve` y navega a `http://localhost:4200`
+- **Explorador de íconos**: Navega a `/collections/{prefix}` para explorar cualquier colección
+
+## 📚 Referencias
+
+- [Iconify Icon Sets](https://icon-sets.iconify.design/) - Explora todas las colecciones disponibles
+- [Iconify API](https://iconify.design/docs/api/) - Documentación de la API
+- [Angular Signals](https://angular.dev/guide/signals) - Más sobre signals en Angular
+
+## 🤝 Contribuir
+
+Las contribuciones son bienvenidas. Por favor:
+
+1. Fork el repositorio
+2. Crea una feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit tus cambios (`git commit -m 'Add amazing feature'`)
+4. Push a la branch (`git push origin feature/amazing-feature`)
+5. Abre un Pull Request
+
+## 📄 Licencia
+
+MIT License - ver el archivo [LICENSE](LICENSE) para detalles.
+
+## 📦 Publicación
+
+### Para desarrolladores
+
+Si quieres contribuir a la librería:
 
 ```bash
-ng generate --help
+# Construir la librería
+ng build ngx-icons-extra
+
+# Publicar a npm
+cd dist/ngx-icons-extra
+npm publish
 ```
 
-## Building
+### Versionado
 
-To build the project run:
+El versionado sigue la convención semántica con una estructura específica:
+
+```
+MAJOR.MINOR.PATCH
+```
+
+- **MAJOR**: Siempre coincide con la versión de Angular compatible (ej: 21.x.x para Angular 21)
+- **MINOR**: Nuevas características o cambios importantes en la librería
+- **PATCH**: Correcciones de bugs y mejoras menores
 
 ```bash
-ng build
+# Actualizar versión (ejemplo para Angular 21)
+npm version patch  # 21.0.1 -> 21.0.2
+npm version minor  # 21.0.1 -> 21.1.0
+npm version major  # 21.0.1 -> 22.0.0 (para nueva versión de Angular)
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+**Creado con ❤️ por [MrNizzy](https://github.com/MrNizzy)**
