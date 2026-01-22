@@ -1,5 +1,7 @@
+@import 'tailwindcss';
+
 /* You can add global styles to this file, and also import other style files */
 body {
-  scrollbar-color: var(--mat-sys-primary) var(--mat-sys-surface);
-  scrollbar-width: auto;
+  scrollbar-color: hsl(from var(--mat-sys-primary) h s l / 30%) hsl(from var(--mat-sys-surface) h s l / 50%);
+  scrollbar-width: thin;
 }

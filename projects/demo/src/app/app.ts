@@ -20,6 +20,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CollectionDialog } from './collection-dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 interface CollectionDetails {
   name: string;
@@ -65,9 +66,7 @@ interface CategoryOption {
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
-    CommonModule,
     NgxIcon,
     MatToolbarModule,
     MatChipsModule,
@@ -79,6 +78,7 @@ interface CategoryOption {
     MatDialogModule,
     MatButtonModule,
     MatIconModule,
+    MatSelectModule,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -95,7 +95,7 @@ export class App implements OnInit {
   readonly paletteFilter = signal<PaletteFilter>('all');
   readonly commercialUseFilter = signal<CommercialUseFilter>('all');
   readonly attributionFilter = signal<AttributionFilter>('all');
-  readonly selectedCategories = signal<Set<string>>(new Set());
+  readonly selectedCategories = signal<string[]>([]);
 
   private readonly dialog = inject(MatDialog);
 
@@ -148,7 +148,7 @@ export class App implements OnInit {
     const commercialFilter = this.commercialUseFilter();
     const attributionFilter = this.attributionFilter();
     const selectedCategories = this.selectedCategories();
-    const hasCategoryFilter = selectedCategories.size > 0;
+    const hasCategoryFilter = selectedCategories.length > 0;
     const groups = new Map<string, CollectionVM[]>();
 
     Object.entries(data).forEach(([id, details]) => {
@@ -170,7 +170,7 @@ export class App implements OnInit {
       }
 
       const category = details.category || 'Otros';
-      const matchesCategory = !hasCategoryFilter || selectedCategories.has(category);
+      const matchesCategory = !hasCategoryFilter || selectedCategories.includes(category);
       if (!matchesCategory) {
         return;
       }
@@ -231,18 +231,12 @@ export class App implements OnInit {
     this.attributionFilter.set(value);
   }
 
-  protected toggleCategory(value: string): void {
-    const current = new Set(this.selectedCategories());
-    if (current.has(value)) {
-      current.delete(value);
-    } else {
-      current.add(value);
-    }
-    this.selectedCategories.set(current);
+  protected toggleCategory(values: string[]): void {
+    this.selectedCategories.set(values);
   }
 
   protected clearCategories(): void {
-    this.selectedCategories.set(new Set());
+    this.selectedCategories.set([]);
   }
 
   protected openCollection(item: CollectionVM): void {

@@ -23,8 +23,8 @@
     </button>
   </div>
 
-  <section class="filters">
-    <mat-form-field class="filters__search" appearance="outline">
+  <section class="flex flex-wrap gap-2 items-center mb-6 w-full">
+    <mat-form-field class="w-full max-w-xl" appearance="outline">
       <mat-label>Buscar colecciones</mat-label>
       <input
         matInput
@@ -34,208 +34,180 @@
         #searchInput
         (input)="setSearch(searchInput.value)"
       />
+      <mat-icon matPrefix>
+        <ngx-icon collection="material-symbols" icon="search" />
+      </mat-icon>
       @if (search()) {
-      <button
-        matIconButton
-        matSuffix
-        type="button"
-        aria-label="Limpiar búsqueda"
-        (click)="setSearch('')"
-      >
-        <mat-icon>
-          <ngx-icon collection="ix" icon="cancel" />
-        </mat-icon>
-      </button>
+        <button
+          matIconButton
+          matSuffix
+          type="button"
+          aria-label="Limpiar búsqueda"
+          (click)="setSearch('')"
+        >
+          <mat-icon>
+            <ngx-icon collection="ix" icon="cancel" />
+          </mat-icon>
+        </button>
       }
     </mat-form-field>
 
-    <div class="filters__panel">
-      <article class="filter-card">
-        <header>
-          <p>Paleta</p>
-          <span>Colores disponibles</span>
-        </header>
-        <mat-chip-set class="filters__chips" role="listbox" aria-label="Filtrar por paleta">
-          @for (option of paletteOptions; track option.value) {
-          <mat-chip-option
-            [selected]="paletteFilter() === option.value"
-            (click)="setPalette(option.value)"
-            [disableRipple]="true"
-            [selectable]="false"
-          >
-            {{ option.label }}
-          </mat-chip-option>
-          }
-        </mat-chip-set>
-      </article>
-
-      <article class="filter-card">
-        <header>
-          <p>Uso comercial</p>
-          <span>Según licencia</span>
-        </header>
-        <mat-chip-set class="filters__chips" role="listbox" aria-label="Filtrar por uso comercial">
-          @for (option of commercialOptions; track option.value) {
-          <mat-chip-option
-            [selected]="commercialUseFilter() === option.value"
-            (click)="setCommercialUse(option.value)"
-            [disableRipple]="true"
-            [selectable]="false"
-          >
-            {{ option.label }}
-          </mat-chip-option>
-          }
-        </mat-chip-set>
-      </article>
-
-      <article class="filter-card">
-        <header>
-          <p>Atribución</p>
-          <span>Requiere crédito</span>
-        </header>
-        <mat-chip-set class="filters__chips" role="listbox" aria-label="Filtrar por atribución">
-          @for (option of attributionOptions; track option.value) {
-          <mat-chip-option
-            [selected]="attributionFilter() === option.value"
-            (click)="setAttribution(option.value)"
-            [disableRipple]="true"
-            [selectable]="false"
-          >
-            {{ option.label }}
-          </mat-chip-option>
-          }
-        </mat-chip-set>
-      </article>
-    </div>
-
-    <div class="filters__categories">
-      <div class="filters__categories-header">
-        <div>
-          <p class="filters__categories-title">Categorías</p>
-          <span>{{ selectedCategories().size || 'Todas' }}</span>
-        </div>
-        <button
-          mat-stroked-button
-          type="button"
-          class="filters__clear"
-          (click)="clearCategories()"
-          [disabled]="selectedCategories().size === 0"
-        >
-          Limpiar
-        </button>
-      </div>
-      <mat-chip-set
-        class="filters__chips filters__chips--scroll"
-        role="listbox"
-        aria-label="Filtrar por categoría"
-      >
-        <mat-chip-option
-          [selected]="selectedCategories().size === 0"
-          (click)="clearCategories()"
-          [disableRipple]="true"
-          [selectable]="false"
-        >
-          Todas
-        </mat-chip-option>
-        @for (option of categoryOptions(); track option.value) {
-        <mat-chip-option
-          [selected]="selectedCategories().has(option.value)"
-          (click)="toggleCategory(option.value)"
-          [disableRipple]="true"
-          [selectable]="false"
-        >
-          {{ option.value }} <span class="chip__badge">{{ option.count }}</span>
-        </mat-chip-option>
+    <mat-form-field appearance="outline">
+      <mat-label>Paleta</mat-label>
+      <mat-select [value]="paletteFilter()" (selectionChange)="setPalette($event.value)">
+        @for (option of paletteOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
         }
-      </mat-chip-set>
-    </div>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Uso comercial</mat-label>
+      <mat-select
+        [value]="commercialUseFilter()"
+        (selectionChange)="setCommercialUse($event.value)"
+      >
+        @for (option of commercialOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Atribución</mat-label>
+      <mat-select [value]="attributionFilter()" (selectionChange)="setAttribution($event.value)">
+        @for (option of attributionOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Categorías</mat-label>
+      <mat-select
+        multiple
+        [value]="selectedCategories()"
+        (selectionChange)="toggleCategory($event.value)"
+      >
+        @for (option of categoryOptions(); track option.value) {
+          <mat-option [value]="option.value">{{ option.value }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
   </section>
 
   @if (loading()) {
-  <section class="state state--loading" aria-live="polite">
-    <mat-progress-spinner diameter="56" mode="indeterminate" />
-    <p>Cargando colecciones...</p>
-  </section>
+    <section class="state state--loading" aria-live="polite">
+      <mat-progress-spinner diameter="56" mode="indeterminate" />
+      <p>Cargando colecciones...</p>
+    </section>
   } @else if (error()) {
-  <section class="state state--error" aria-live="assertive">
-    <p>{{ error() }}</p>
-    <button mat-flat-button color="accent" type="button" (click)="refresh()">
-      Intentar de nuevo
-    </button>
-  </section>
+    <section class="state state--error" aria-live="assertive">
+      <p>{{ error() }}</p>
+      <button mat-flat-button color="accent" type="button" (click)="refresh()">
+        Intentar de nuevo
+      </button>
+    </section>
   } @else {
-  <section class="groups" aria-live="polite">
-    @if (!groupedCollections().length) {
-    <div class="state state--empty">
-      <p>No encontramos colecciones con ese criterio.</p>
-    </div>
-    } @else { @for (group of groupedCollections(); track group.category) { @defer (on viewport) {
-    <section class="group">
-      <header class="group__header">
-        <div>
-          <p class="group__eyebrow">Categoría</p>
-          <h2 class="group__title">{{ group.category }}</h2>
+    <section class="grid gap-4" aria-live="polite">
+      @if (!groupedCollections().length) {
+        <div class="state state--empty">
+          <p>No encontramos colecciones con ese criterio.</p>
         </div>
-        <span class="group__meta">{{ group.items.length }} sets</span>
-      </header>
-      <div class="group__grid">
-        @for (item of group.items; track item.id) {
-        <mat-card
-          class="collection-card"
-          role="button"
-          tabindex="0"
-          (click)="viewCollection(item)"
-          (keydown.enter)="viewCollection(item)"
-        >
-          <mat-card-header>
-            <mat-card-title>{{ item.details.name }}</mat-card-title>
-            <mat-card-subtitle
-              >{{ item.details.total }} íconos • v{{ item.details.version }}</mat-card-subtitle
-            >
-          </mat-card-header>
-          <mat-card-content>
-            <p class="collection-card__license">
-              {{ item.details.license.title }} · {{ item.details.author.name }}
-            </p>
-            <div class="collection-card__samples">
-              @for (sample of item.samples; track sample; let i = $index) { @if (i < 4) {
-              <button matIconButton type="button">
-                <mat-icon>
-                  <ngx-icon [collection]="item.id" [icon]="sample" />
-                </mat-icon>
-              </button>
-              } }
-            </div>
-          </mat-card-content>
-        </mat-card>
-        }
-      </div>
-    </section>
-    } @placeholder{
-    <section class="group group--skeleton" aria-hidden="true">
-      <header class="group__header">
-        <div>
-          <div class="skeleton skeleton-eyebrow"></div>
-          <div class="skeleton skeleton-title"></div>
-        </div>
-        <div class="skeleton skeleton-meta"></div>
-      </header>
-      <div class="group__grid">
-        @for (card of skeletonCards; track card) {
-        <article class="collection-card skeleton-card">
-          <div class="skeleton skeleton-heading"></div>
-          <div class="skeleton skeleton-subheading"></div>
-          <div class="skeleton skeleton-license"></div>
-          <div class="skeleton-chip-row">
-            @for (chip of skeletonChips; track chip) {
-            <div class="skeleton skeleton-chip"></div>
+      } @else {
+        <section class="group w-full overflow-hidden space-y-4">
+          @for (group of groupedCollections(); track group.category) {
+            @defer (on viewport) {
+              <header class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold">{{ group.category }}</h2>
+                <span class="text-sm text-gray-500">{{ group.items.length }} colecciones</span>
+              </header>
+              <div class="flex flex-nowrap gap-4 overflow-x-auto p-4">
+                @for (item of group.items; track item.id) {
+                  @defer (on viewport) {
+                    <article
+                      class="flex flex-col gap-2 p-4 shadow-md border border-gray-400/10 rounded-lg min-w-98 cursor-pointer"
+                      role="button"
+                      tabindex="0"
+                      (click)="viewCollection(item)"
+                      (keydown.enter)="viewCollection(item)"
+                      [attr.aria-label]="'Ver colección ' + item.details.name"
+                    >
+                      <h3 class="text-lg truncate">{{ item.details.name }}</h3>
+                      <p class="text-xs text-gray-500">
+                        {{ item.details.total }} íconos • v{{ item.details.version }}
+                      </p>
+                      <p class="text-xs text-gray-500">
+                        {{ item.details.license.title }} · {{ item.details.author.name }}
+                      </p>
+                      <div class="flex flex-wrap gap-2">
+                        @for (sample of item.samples; track sample; let i = $index) {
+                          @if (i < 4) {
+                            <button
+                              class="p-1 border border-gray-200 rounded-lg"
+                              matIconButton
+                              type="button"
+                            >
+                              <ngx-icon
+                                [collection]="item.id"
+                                [icon]="sample"
+                                width="24"
+                                height="24"
+                              />
+                            </button>
+                          }
+                        }
+                      </div>
+                    </article>
+                  } @placeholder {
+                    <div
+                      class="flex flex-col gap-2 p-4 shadow-md rounded-lg min-w-98 cursor-pointer"
+                      role="button"
+                      tabindex="0"
+                      (click)="viewCollection(item)"
+                      (keydown.enter)="viewCollection(item)"
+                      [attr.aria-label]="'Ver colección ' + item.details.name"
+                    >
+                      <div class="skeleton skeleton-title"></div>
+                      <div class="skeleton skeleton-meta"></div>
+                      <div class="skeleton skeleton-license"></div>
+                      <div class="flex flex-wrap gap-2">
+                        <div class="skeleton skeleton-chip"></div>
+                        <div class="skeleton skeleton-chip"></div>
+                        <div class="skeleton skeleton-chip"></div>
+                      </div>
+                    </div>
+                  }
+                }
+              </div>
+            } @placeholder {
+              <section class="group group--skeleton" aria-hidden="true">
+                <header class="group__header">
+                  <div>
+                    <div class="skeleton skeleton-eyebrow"></div>
+                    <div class="skeleton skeleton-title"></div>
+                  </div>
+                  <div class="skeleton skeleton-meta"></div>
+                </header>
+                <div class="group__grid">
+                  @for (card of skeletonCards; track card) {
+                    <article class="collection-card skeleton-card">
+                      <div class="skeleton skeleton-heading"></div>
+                      <div class="skeleton skeleton-subheading"></div>
+                      <div class="skeleton skeleton-license"></div>
+                      <div class="skeleton-chip-row">
+                        @for (chip of skeletonChips; track chip) {
+                          <div class="skeleton skeleton-chip"></div>
+                        }
+                      </div>
+                    </article>
+                  }
+                </div>
+              </section>
             }
-          </div>
-        </article>
-        }
-      </div>
+          }
+        </section>
+      }
     </section>
-    } } }
-  </section>
   }
 </main>
