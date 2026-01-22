@@ -14,8 +14,6 @@ import { IconifyService, IconRequestOptions } from './iconify.service';
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      height: 100%;
     }
 
     :host svg {
