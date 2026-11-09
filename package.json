@@ -1,6 +1,7 @@
 {
   "name": "ngx-icons-workspace",
   "version": "0.0.0",
+  "packageManager": "pnpm@12.6.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve demo",
@@ -9,11 +10,11 @@
     "build": "ng build demo",
     "watch": "ng build demo --watch --configuration development",
     "test": "ng test demo",
-    "lib:version:patch": "cd projects/ngx-icons-extra && npm version patch --no-git-tag-version",
-    "lib:version:minor": "cd projects/ngx-icons-extra && npm version minor --no-git-tag-version",
-    "lib:version:major": "cd projects/ngx-icons-extra && npm version major --no-git-tag-version",
-    "lib:publish": "npm run lib:build && cd dist/ngx-icons-extra && npm publish",
-    "lib:publish:dry": "npm run lib:build && cd dist/ngx-icons-extra && npm pack --dry-run"
+    "lib:version:patch": "cd projects/ngx-icons-extra && pnpm version patch --no-git-tag-version",
+    "lib:version:minor": "cd projects/ngx-icons-extra && pnpm version minor --no-git-tag-version",
+    "lib:version:major": "cd projects/ngx-icons-extra && pnpm version major --no-git-tag-version",
+    "lib:publish": "pnpm run lib:build && cd dist/ngx-icons-extra && pnpm publish",
+    "lib:publish:dry": "pnpm run lib:build && cd dist/ngx-icons-extra && pnpm pack --dry-run"
   },
   "prettier": {
     "printWidth": 100,
@@ -29,14 +30,14 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/cdk": "^21.1.1",
-    "@angular/common": "^21.1.1",
-    "@angular/compiler": "^21.1.1",
-    "@angular/core": "^21.1.1",
-    "@angular/forms": "^21.1.1",
-    "@angular/material": "^21.1.1",
-    "@angular/platform-browser": "^21.1.1",
-    "@angular/router": "^21.1.1",
+    "@angular/cdk": "^22.2.6",
+    "@angular/common": "^22.2.5",
+    "@angular/compiler": "^22.2.5",
+    "@angular/core": "^22.2.5",
+    "@angular/forms": "^22.2.5",
+    "@angular/material": "^22.2.6",
+    "@angular/platform-browser": "^22.2.5",
+    "@angular/router": "^22.2.5",
     "@tailwindcss/postcss": "^4.1.18",
     "postcss": "^8.5.6",
     "rxjs": "~7.8.0",
@@ -44,17 +45,18 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@angular/build": "^21.1.1",
-    "@angular/cli": "^21.1.1",
-    "@angular/compiler-cli": "^21.1.1",
+    "@angular/build": "^22.2.6",
+    "@angular/cli": "^22.2.6",
+    "@angular/compiler-cli": "^22.2.5",
     "@types/jasmine": "~5.1.0",
+    "istanbul-lib-instrument": "^6.0.3",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "ng-packagr": "^21.0.1",
-    "typescript": "~5.9.2"
+    "ng-packagr": "^22.2.6",
+    "typescript": "~6.0.3"
   }
 }

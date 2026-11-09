@@ -14,7 +14,7 @@ Una librería Angular para mostrar íconos de Iconify con rendimiento optimizado
 
 - **Rendimiento optimizado** con `OnPush` change detection
 - **API moderna** usando signals de Angular
-- **Standalone components** - compatible con Angular 21+
+- **Standalone components** - compatible con Angular 22+
 - **Más de 100,000 íconos** de todas las colecciones de Iconify
 - **Personalización completa** con tamaño, color, rotación y flip
 - **TypeScript completo** con tipado estricto
@@ -24,6 +24,8 @@ Una librería Angular para mostrar íconos de Iconify con rendimiento optimizado
 
 ```bash
 npm install ngx-icons-extra
+# o con pnpm
+pnpm add ngx-icons-extra
 ```
 
 ## 🛠️ Configuración
@@ -231,12 +233,17 @@ MIT License - ver el archivo [LICENSE](LICENSE) para detalles.
 Si quieres contribuir a la librería:
 
 ```bash
+# Instalar dependencias (el workspace usa pnpm)
+pnpm install
+
 # Construir la librería
-ng build ngx-icons-extra
+pnpm run lib:build
+
+# Verificar el paquete sin publicar
+pnpm run lib:publish:dry
 
 # Publicar a npm
-cd dist/ngx-icons-extra
-npm publish
+pnpm run lib:publish
 ```
 
 ### Versionado
@@ -247,15 +254,15 @@ El versionado sigue la convención semántica con una estructura específica:
 MAJOR.MINOR.PATCH
 ```
 
-- **MAJOR**: Siempre coincide con la versión de Angular compatible (ej: 21.x.x para Angular 21)
+- **MAJOR**: Siempre coincide con la versión de Angular compatible (ej: 22.x.x para Angular 22)
 - **MINOR**: Nuevas características o cambios importantes en la librería
 - **PATCH**: Correcciones de bugs y mejoras menores
 
 ```bash
-# Actualizar versión (ejemplo para Angular 21)
-npm version patch  # 21.0.1 -> 21.0.2
-npm version minor  # 21.0.1 -> 21.1.0
-npm version major  # 21.0.1 -> 22.0.0 (para nueva versión de Angular)
+# Actualizar versión (ejemplo para Angular 22)
+pnpm run lib:version:patch  # 22.0.0 -> 22.0.1
+pnpm run lib:version:minor  # 22.0.0 -> 22.1.0
+pnpm run lib:version:major  # 22.0.0 -> 23.0.0 (para nueva versión de Angular)
 ```
 
 ---
